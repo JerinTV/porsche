@@ -395,10 +395,26 @@ function TransitionFilm() {
     }
 
     ctx.clearRect(0, 0, width, height);
-    const scale = Math.max(width / image.width, height / image.height);
-    const drawWidth = image.width * scale;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    const horizontalCrop = image.width * 0.09;
+    const sourceWidth = image.width - horizontalCrop * 2;
+    const scale = Math.max(width / sourceWidth, height / image.height);
+    const drawWidth = sourceWidth * scale;
     const drawHeight = image.height * scale;
-    ctx.drawImage(image, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+
+    ctx.drawImage(
+      image,
+      horizontalCrop,
+      0,
+      sourceWidth,
+      image.height,
+      (width - drawWidth) / 2,
+      (height - drawHeight) / 2,
+      drawWidth,
+      drawHeight
+    );
   }, [getImage]);
 
   React.useEffect(() => {
