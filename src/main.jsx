@@ -17,9 +17,10 @@ import {
 } from 'lucide-react';
 import './styles.css';
 
-const frameCount = 300;
-const frames = Array.from({ length: frameCount }, (_, index) => {
-  const frame = String(index + 1).padStart(3, '0');
+const heroFrameCount = 100;
+const heroFrames = Array.from({ length: heroFrameCount }, (_, index) => {
+  const frameNumber = Math.min(300, index * 3 + 1);
+  const frame = String(frameNumber).padStart(3, '0');
   return `/frames/ezgif-frame-${frame}.png`;
 });
 
@@ -128,31 +129,16 @@ function usePageMotion() {
 
 function HeroCanvas({ onCaptionActive }) {
   const canvasRef = React.useRef(null);
-  const imageCache = React.useRef(new Map());
+  const imagesRef = React.useRef([]);
   const rafRef = React.useRef(0);
   const lastTickRef = React.useRef(0);
   const [frame, setFrame] = React.useState(0);
   const [loadedFirst, setLoadedFirst] = React.useState(false);
   const reducedMotion = usePrefersReducedMotion();
 
-  const getImage = React.useCallback((index) => {
-    const src = frames[index];
-    const cached = imageCache.current.get(src);
-    if (cached) return cached;
-
-    const image = new Image();
-    image.decoding = 'async';
-    image.onload = () => {
-      if (index === 0) setLoadedFirst(true);
-    };
-    image.src = src;
-    imageCache.current.set(src, image);
-    return image;
-  }, []);
-
   const drawFrame = React.useCallback((index) => {
     const canvas = canvasRef.current;
-    const image = getImage(index);
+    const image = imagesRef.current[index];
     if (!canvas || !image?.complete) return;
 
     const ctx = canvas.getContext('2d');
@@ -167,31 +153,37 @@ function HeroCanvas({ onCaptionActive }) {
     }
 
     ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     const scale = Math.max(width / image.width, height / image.height);
     const drawWidth = image.width * scale;
     const drawHeight = image.height * scale;
     const x = (width - drawWidth) / 2;
     const y = (height - drawHeight) / 2;
     ctx.drawImage(image, x, y, drawWidth, drawHeight);
-  }, [getImage]);
+  }, []);
 
   React.useEffect(() => {
-    for (let offset = 0; offset < 24; offset += 1) {
-      getImage((frame + offset) % frameCount);
-    }
+    let mounted = true;
+    heroFrames.forEach((src, index) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.onload = () => {
+        if (!mounted) return;
+        imagesRef.current[index] = image;
+        if (index === 0) setLoadedFirst(true);
+      };
+      image.src = src;
+    });
 
-    if (imageCache.current.size > 72) {
-      imageCache.current.forEach((_, src) => {
-        const match = src.match(/ezgif-frame-(\d+)\.png$/);
-        const index = match ? Number(match[1]) - 1 : 0;
-        const forward = (index - frame + frameCount) % frameCount;
-        const backward = (frame - index + frameCount) % frameCount;
-        if (forward > 48 && backward > 24) imageCache.current.delete(src);
-      });
-    }
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
+  React.useEffect(() => {
     drawFrame(frame);
-  }, [drawFrame, frame, getImage]);
+  }, [drawFrame, frame, loadedFirst]);
 
   React.useEffect(() => {
     const onResize = () => drawFrame(frame);
@@ -204,8 +196,8 @@ function HeroCanvas({ onCaptionActive }) {
 
     const tick = (time) => {
       if (!lastTickRef.current) lastTickRef.current = time;
-      if (time - lastTickRef.current > 33) {
-        setFrame((current) => (current + 1) % frameCount);
+      if (time - lastTickRef.current > 24) {
+        setFrame((current) => (current + 1) % heroFrameCount);
         lastTickRef.current = time;
       }
       rafRef.current = requestAnimationFrame(tick);
@@ -216,7 +208,7 @@ function HeroCanvas({ onCaptionActive }) {
   }, [reducedMotion]);
 
   React.useEffect(() => {
-    onCaptionActive?.(frame >= Math.floor(frameCount * 0.68));
+    onCaptionActive?.(frame >= Math.floor(heroFrameCount * 0.68));
   }, [frame, onCaptionActive]);
 
   return (

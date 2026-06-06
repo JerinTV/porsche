@@ -76,12 +76,14 @@ main {
 .hero-media {
   transform: translateY(var(--hero-shift)) scale(var(--hero-scale));
   transition: transform 120ms linear;
+  will-change: transform;
 }
 
 .cinematic-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  image-rendering: auto;
 }
 
 .media-vignette {
