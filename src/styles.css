@@ -291,16 +291,16 @@ nav a.active::after {
   z-index: 1;
   display: grid;
   gap: 0.8rem;
-  color: #ffffff;
-  text-shadow: 0 12px 34px rgba(0, 8, 18, 0.82), 0 0 32px rgba(188, 236, 255, 0.24);
+  color: #f2d389;
+  text-shadow: 0 12px 34px rgba(0, 8, 18, 0.86), 0 0 30px rgba(242, 211, 137, 0.26);
 }
 
 .transition-copy::before {
   width: 72px;
   height: 2px;
   content: "";
-  background: linear-gradient(90deg, #ffffff, #8edcff);
-  box-shadow: 0 0 22px rgba(142, 220, 255, 0.46);
+  background: linear-gradient(90deg, #fff5c8, #c99a3a);
+  box-shadow: 0 0 22px rgba(242, 211, 137, 0.4);
 }
 
 .transition-right::before {
@@ -308,7 +308,7 @@ nav a.active::after {
 }
 
 .transition-copy small {
-  color: rgba(235, 249, 255, 0.72);
+  color: rgba(255, 238, 186, 0.76);
   font-size: 0.72rem;
   font-weight: 950;
   letter-spacing: 0.22em;
@@ -316,6 +316,10 @@ nav a.active::after {
 }
 
 .transition-copy span {
+  background: linear-gradient(180deg, #fff6cc, #d6a94d 62%, #f2d389);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   display: block;
   font-size: clamp(2.05rem, 3.9vw, 4.8rem);
   font-weight: 950;
