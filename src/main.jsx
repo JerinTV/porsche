@@ -284,11 +284,6 @@ function Hero() {
         <span>Driver first</span>
         <strong>Every input returns precision.</strong>
       </div>
-      <div className={`hero-caption ${showCaption ? 'visible' : ''}`} aria-hidden={!showCaption}>
-        <span>Porsche 911 GT3 RS</span>
-        <strong>Precision made visible.</strong>
-        <p>Track-bred aero. Pure driver focus. A silhouette that owns the light.</p>
-      </div>
     </section>
   );
 }
