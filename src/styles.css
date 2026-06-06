@@ -568,6 +568,31 @@ h3 {
   color: #277393;
 }
 
+.model-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 260px);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  margin-bottom: clamp(2rem, 5vw, 4.5rem);
+}
+
+.model-heading .section-head {
+  margin-bottom: 0;
+}
+
+.crest-art {
+  justify-self: end;
+  width: min(260px, 32vw);
+  padding: 0;
+  filter: drop-shadow(0 24px 34px rgba(31, 86, 109, 0.18));
+}
+
+.crest-art img {
+  width: 100%;
+  aspect-ratio: 1 / 1.12;
+  object-fit: contain;
+}
+
 .model-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
@@ -1089,12 +1114,18 @@ footer p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .model-heading,
   .model-layout,
   .studio-section,
   .immersive-section,
   .experience-section,
   .contact-section {
     grid-template-columns: 1fr;
+  }
+
+  .crest-art {
+    justify-self: center;
+    width: min(190px, 46vw);
   }
 
   .hero-metrics {

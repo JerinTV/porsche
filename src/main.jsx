@@ -336,9 +336,14 @@ function AnimatedSpec({ value, suffix, label }) {
 function ModelSection() {
   return (
     <section className="model-section section-pad" id="models">
-      <div className="section-head reveal">
-        <p className="eyebrow">The 911 spirit</p>
-        <h2>Motorsport poise, road presence.</h2>
+      <div className="model-heading">
+        <div className="section-head reveal">
+          <p className="eyebrow">The 911 spirit</p>
+          <h2>Motorsport poise, road presence.</h2>
+        </div>
+        <div className="crest-art reveal">
+          <img src="/porsche/PR.jpg" alt="Porsche crest" />
+        </div>
       </div>
       <div className="model-layout">
         <div className="model-image reveal">
