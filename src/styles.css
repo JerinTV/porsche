@@ -1082,7 +1082,6 @@ footer p {
   }
 
   .model-layout,
-  .transition-film,
   .studio-section,
   .immersive-section,
   .experience-section,
@@ -1100,15 +1099,7 @@ footer p {
   }
 
   .transition-film {
-    grid-template-columns: 1fr;
-    min-height: clamp(460px, 72svh, 680px);
-    padding-top: clamp(7rem, 18vw, 10rem);
-    padding-bottom: clamp(7rem, 18vw, 10rem);
-  }
-
-  .transition-left,
-  .transition-right {
-    text-align: center;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr);
   }
 }
 
