@@ -87,6 +87,27 @@ const specs = [
   { value: '911', suffix: '', label: 'Iconic model line' },
 ];
 
+const chapters = [
+  {
+    image: '/porsche/rear-wing.jpeg',
+    kicker: 'Aerodynamics',
+    title: 'Air becomes a performance component.',
+    text: 'A large rear wing, sculpted intakes, and track-led bodywork give the 911 GT3 RS its unmistakable visual pressure.',
+  },
+  {
+    image: '/porsche/interior.jpeg',
+    kicker: 'Cockpit',
+    title: 'Everything is arranged around response.',
+    text: 'The interior is purposeful and close to the driver, with a rhythm that feels technical without losing luxury.',
+  },
+  {
+    image: '/porsche/track-front.jpeg',
+    kicker: 'Road presence',
+    title: 'Poise that reads before the engine starts.',
+    text: 'Wide stance, low surfaces, and motorsport details create a car that feels in motion even when still.',
+  },
+];
+
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = React.useState(false);
 
@@ -353,7 +374,8 @@ function ModelSection() {
           <p>
             The 911 GT3 RS turns motorsport technology into a focused road car:
             direct, lightweight, aerodynamic, and visually unmistakable from
-            every angle.
+            every angle. This section is built like a model launch page, with
+            image, crest, statistics, and narrative moving as one system.
           </p>
           <div className="stats-row">
             {specs.map((spec) => (
@@ -361,6 +383,29 @@ function ModelSection() {
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function ChapterSection() {
+  return (
+    <section className="chapter-section section-pad">
+      <div className="chapter-intro reveal">
+        <p className="eyebrow">Design chapters</p>
+        <h2>Every detail has a job to do.</h2>
+      </div>
+      <div className="chapter-grid">
+        {chapters.map((chapter) => (
+          <article className="chapter-card reveal" key={chapter.title}>
+            <img src={chapter.image} alt={chapter.title} />
+            <div>
+              <span>{chapter.kicker}</span>
+              <h3>{chapter.title}</h3>
+              <p>{chapter.text}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -528,15 +573,23 @@ function Feature({ icon, title, text }) {
 function PerformanceSection() {
   return (
     <section className="performance-section section-pad" id="performance">
-      <div className="section-head center reveal">
-        <p className="eyebrow">Performance language</p>
-        <h2>Luxury with tension, not decoration.</h2>
+      <div className="performance-hero reveal">
+        <img src="/porsche/track-rear.jpeg" alt="Porsche 911 GT3 RS on track" />
+        <div>
+          <p className="eyebrow">Performance language</p>
+          <h2>Luxury with tension, not decoration.</h2>
+          <p>
+            A premium Porsche page should feel controlled, fast, and deliberate.
+            These sections use restrained motion, sharp contrast, and mechanical
+            detail rather than generic blocks.
+          </p>
+        </div>
       </div>
       <div className="feature-grid">
-        <Feature icon={<Gauge size={24} />} title="Driver Focus" text="Dark cockpit contrast and clean UI rhythm keep attention on the machine." />
-        <Feature icon={<Wind size={24} />} title="Aero Presence" text="Wing, stance, and airflow details are treated as premium visual anchors." />
-        <Feature icon={<Cpu size={24} />} title="Technical Precision" text="Every detail supports response, feedback, and confidence at speed." />
-        <Feature icon={<ShieldCheck size={24} />} title="Brand Finish" text="Sharp spacing, responsive scale, and restrained blue-white color create polish." />
+        <Feature icon={<Gauge size={24} />} title="Driver Focus" text="Information is dense, quiet, and placed with purpose." />
+        <Feature icon={<Wind size={24} />} title="Aero Presence" text="The wing, stance, and body surfaces lead the visual system." />
+        <Feature icon={<Cpu size={24} />} title="Technical Precision" text="Motion and layout support the car rather than distracting from it." />
+        <Feature icon={<ShieldCheck size={24} />} title="Brand Finish" text="Blue, black, white, and gold accents stay controlled and upscale." />
       </div>
     </section>
   );
@@ -547,7 +600,7 @@ function GallerySection() {
     <section className="gallery-section section-pad" id="gallery">
       <div className="section-head reveal">
         <p className="eyebrow">Gallery</p>
-        <h2>Exterior, aero, cockpit, motion.</h2>
+        <h2>A visual rhythm built for inspection.</h2>
       </div>
       <div className="gallery-grid">
         {gallery.map((item) => (
@@ -587,29 +640,29 @@ function ImmersiveSection() {
   return (
     <section className="immersive-section">
       <div className="sticky-copy reveal">
-        <p className="eyebrow">Dynamic by design</p>
-        <h2>The page responds like a product reveal.</h2>
+        <p className="eyebrow">Porsche digital showroom</p>
+        <h2>A site that feels engineered, not decorated.</h2>
         <p>
-          Sticky imagery, progressive copy, animated measurements, and interactive
-          selection patterns create a premium site that can scale across an
-          entire model family.
+          Sticky imagery, progressive copy, animated measurements, and
+          interactive selection patterns make the experience feel alive while
+          keeping the car at the center.
         </p>
       </div>
       <div className="timeline">
         <article className="timeline-card reveal">
           <MousePointer2 size={22} />
-          <h3>Explore</h3>
-          <p>Visitors move from cinematic impact into model details without a hard visual break.</p>
+          <h3>Discover</h3>
+          <p>Visitors move from cinematic impact into detail-led model storytelling.</p>
         </article>
         <article className="timeline-card reveal">
           <Gem size={22} />
-          <h3>Configure</h3>
-          <p>Color and trim modules can expand into wheels, interiors, packages, and pricing.</p>
+          <h3>Specify</h3>
+          <p>Finish, cockpit, wheels, and trim moments can expand naturally from this structure.</p>
         </article>
         <article className="timeline-card reveal">
           <Timer size={22} />
-          <h3>Convert</h3>
-          <p>The final enquiry area is built for booking, test drives, dealer routing, or lead capture.</p>
+          <h3>Enquire</h3>
+          <p>The final flow feels private and premium instead of like a generic form.</p>
         </article>
       </div>
     </section>
@@ -620,25 +673,25 @@ function ExperienceSection() {
   return (
     <section className="experience-section section-pad">
       <div className="experience-copy reveal">
-        <p className="eyebrow">Scalable website system</p>
-        <h2>Ready for models, launches, events, and enquiries.</h2>
+        <p className="eyebrow">Ownership journey</p>
+        <h2>From first impression to private consultation.</h2>
       </div>
       <div className="experience-list">
         <div className="experience-item reveal">
           <Car size={24} />
-          <span>Model showroom pages</span>
+          <span>Model discovery with premium image-led sections</span>
         </div>
         <div className="experience-item reveal">
           <Sparkles size={24} />
-          <span>Campaign visuals and launch stories</span>
+          <span>Campaign moments that feel cinematic and controlled</span>
         </div>
         <div className="experience-item reveal">
           <Wrench size={24} />
-          <span>Performance technology and design stories</span>
+          <span>Performance technology explained through elegant modules</span>
         </div>
         <div className="experience-item reveal">
           <Timer size={24} />
-          <span>Event, test drive, and booking flows</span>
+          <span>Concierge, test drive, and dealer enquiry pathways</span>
         </div>
       </div>
     </section>
@@ -650,7 +703,11 @@ function ContactSection() {
     <section className="contact-section section-pad" id="contact">
       <div className="contact-copy reveal">
         <p className="eyebrow">Porsche 911 GT3 RS</p>
-        <h2>Make the first impression feel engineered.</h2>
+        <h2>Begin with a private request.</h2>
+        <p>
+          The final moment stays quiet and confident: a short concierge-style
+          enquiry, aligned with the tone of the car.
+        </p>
       </div>
       <form className="contact-form reveal">
         <label>
@@ -705,6 +762,7 @@ function App() {
       <Hero />
       <TransitionFilm />
       <ModelSection />
+      <ChapterSection />
       <PerformanceSection />
       <StudioSection />
       <GallerySection />
