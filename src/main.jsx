@@ -342,7 +342,7 @@ function ModelSection() {
           <h2>Motorsport poise, road presence.</h2>
         </div>
         <div className="crest-art reveal">
-          <img src="/porsche/PR.jpg" alt="Porsche crest" />
+          <img src="/porsche/PR-transparent.png" alt="Porsche crest" />
         </div>
       </div>
       <div className="model-layout">
