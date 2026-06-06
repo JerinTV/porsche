@@ -155,7 +155,10 @@ function HeroCanvas({ onCaptionActive }) {
     ctx.clearRect(0, 0, width, height);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    const scale = Math.max(width / image.width, height / image.height);
+    const portraitViewport = rect.width / rect.height < 1.05;
+    const scale = portraitViewport
+      ? Math.min(width / image.width, height / image.height)
+      : Math.max(width / image.width, height / image.height);
     const drawWidth = image.width * scale;
     const drawHeight = image.height * scale;
     const x = (width - drawWidth) / 2;
@@ -400,7 +403,10 @@ function TransitionFilm() {
 
     const horizontalCrop = image.width * 0.09;
     const sourceWidth = image.width - horizontalCrop * 2;
-    const scale = Math.max(width / sourceWidth, height / image.height);
+    const portraitViewport = rect.width / rect.height < 1.05;
+    const scale = portraitViewport
+      ? Math.min(width / sourceWidth, height / image.height)
+      : Math.max(width / sourceWidth, height / image.height);
     const drawWidth = sourceWidth * scale;
     const drawHeight = image.height * scale;
 
