@@ -23,6 +23,12 @@ const frames = Array.from({ length: frameCount }, (_, index) => {
   return `/frames/ezgif-frame-${frame}.png`;
 });
 
+const transitionFrameCount = 208;
+const transitionFrames = Array.from({ length: transitionFrameCount }, (_, index) => {
+  const frame = String(index + 1).padStart(3, '0');
+  return `/transition/ezgif-frame-${frame}.png`;
+});
+
 const gallery = [
   {
     src: '/porsche/track-rear.jpeg',
@@ -334,7 +340,7 @@ function ModelSection() {
     <section className="model-section section-pad" id="models">
       <div className="section-head reveal">
         <p className="eyebrow">The 911 spirit</p>
-        <h2>Designed to look calm at impossible speed.</h2>
+        <h2>Motorsport poise, road presence.</h2>
       </div>
       <div className="model-layout">
         <div className="model-image reveal">
@@ -352,6 +358,94 @@ function ModelSection() {
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function TransitionFilm() {
+  const canvasRef = React.useRef(null);
+  const imageCache = React.useRef(new Map());
+  const rafRef = React.useRef(0);
+  const lastTickRef = React.useRef(0);
+  const [frame, setFrame] = React.useState(0);
+  const reducedMotion = usePrefersReducedMotion();
+
+  const getImage = React.useCallback((index) => {
+    const src = transitionFrames[index];
+    const cached = imageCache.current.get(src);
+    if (cached) return cached;
+
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = src;
+    imageCache.current.set(src, image);
+    return image;
+  }, []);
+
+  const drawFrame = React.useCallback((index) => {
+    const canvas = canvasRef.current;
+    const image = getImage(index);
+    if (!canvas || !image.complete) return;
+
+    const ctx = canvas.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(rect.width * ratio));
+    const height = Math.max(1, Math.floor(rect.height * ratio));
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+    const scale = Math.max(width / image.width, height / image.height);
+    const drawWidth = image.width * scale;
+    const drawHeight = image.height * scale;
+    ctx.drawImage(image, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+  }, [getImage]);
+
+  React.useEffect(() => {
+    for (let offset = 0; offset < 12; offset += 1) {
+      getImage((frame + offset) % transitionFrameCount);
+    }
+    drawFrame(frame);
+  }, [drawFrame, frame, getImage]);
+
+  React.useEffect(() => {
+    const onResize = () => drawFrame(frame);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [drawFrame, frame]);
+
+  React.useEffect(() => {
+    if (reducedMotion) return undefined;
+
+    const tick = (time) => {
+      if (!lastTickRef.current) lastTickRef.current = time;
+      if (time - lastTickRef.current > 42) {
+        setFrame((current) => (current + 1) % transitionFrameCount);
+        lastTickRef.current = time;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [reducedMotion]);
+
+  return (
+    <section className="transition-film" aria-label="Porsche motion feature">
+      <div className="transition-copy transition-left reveal">
+        <span>Designed to look calm</span>
+      </div>
+      <div className="transition-video reveal">
+        <canvas ref={canvasRef} />
+        <div className="transition-shine" />
+      </div>
+      <div className="transition-copy transition-right reveal">
+        <span>at impossible speed</span>
       </div>
     </section>
   );
@@ -588,6 +682,7 @@ function App() {
       <div className="brand-divider" aria-label="Porsche">
         <span>PORSCHE</span>
       </div>
+      <TransitionFilm />
       <ModelSection />
       <PerformanceSection />
       <StudioSection />

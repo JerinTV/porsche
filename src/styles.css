@@ -251,7 +251,7 @@ nav a.active::after {
 
 .brand-divider {
   position: relative;
-  z-index: 4;
+  z-index: 5;
   height: 0;
   display: grid;
   place-items: center;
@@ -274,6 +274,91 @@ nav a.active::after {
   font-weight: 900;
   letter-spacing: 0.22em;
   text-align: center;
+}
+
+.transition-film {
+  position: relative;
+  min-height: clamp(620px, 86vh, 900px);
+  display: grid;
+  grid-template-columns: minmax(180px, 0.72fr) minmax(420px, 1.5fr) minmax(180px, 0.72fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  align-items: center;
+  padding: clamp(5.6rem, 10vw, 8.5rem) clamp(1rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(142, 220, 255, 0.2), transparent 26rem),
+    linear-gradient(180deg, #06111b, #0b2232 54%, #f3fbff 160%);
+  isolation: isolate;
+}
+
+.transition-film::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(142, 220, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(234, 250, 255, 0.07) 1px, transparent 1px);
+  background-size: 92px 92px;
+  mask-image: linear-gradient(180deg, transparent, black 18%, black 72%, transparent);
+}
+
+.transition-video {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #071521;
+  box-shadow:
+    0 32px 110px rgba(0, 8, 18, 0.42),
+    0 0 0 1px rgba(226, 249, 255, 0.14),
+    0 0 80px rgba(142, 220, 255, 0.2);
+}
+
+.transition-video canvas {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+.transition-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(3, 9, 15, 0.34), transparent 18%, transparent 82%, rgba(3, 9, 15, 0.34)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 28%, rgba(3, 9, 15, 0.18));
+}
+
+.transition-copy {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  text-shadow: 0 12px 34px rgba(0, 8, 18, 0.82), 0 0 32px rgba(188, 236, 255, 0.24);
+}
+
+.transition-copy span {
+  display: block;
+  font-size: clamp(2rem, 4.4vw, 5.4rem);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.transition-left {
+  text-align: left;
+}
+
+.transition-right {
+  text-align: right;
+}
+
+.transition-left.visible {
+  animation: premiumSlideLeft 900ms ease both;
+}
+
+.transition-right.visible {
+  animation: premiumSlideRight 900ms ease both;
 }
 
 .hero-caption span {
@@ -1027,6 +1112,7 @@ footer p {
   }
 
   .model-layout,
+  .transition-film,
   .studio-section,
   .immersive-section,
   .experience-section,
@@ -1041,6 +1127,16 @@ footer p {
   .studio-copy,
   .sticky-copy {
     position: static;
+  }
+
+  .transition-film {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .transition-left,
+  .transition-right {
+    text-align: center;
   }
 }
 
@@ -1118,6 +1214,10 @@ footer p {
     grid-row: auto;
   }
 
+  .transition-copy span {
+    font-size: clamp(2rem, 12vw, 3.8rem);
+  }
+
   footer {
     display: grid;
   }
@@ -1149,5 +1249,27 @@ footer p {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes premiumSlideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes premiumSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
