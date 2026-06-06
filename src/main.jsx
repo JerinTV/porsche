@@ -694,9 +694,6 @@ function App() {
     <main>
       <RevealObserver />
       <Hero />
-      <div className="brand-divider" aria-label="Porsche">
-        <span>PORSCHE</span>
-      </div>
       <TransitionFilm />
       <ModelSection />
       <PerformanceSection />

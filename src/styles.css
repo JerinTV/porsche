@@ -228,33 +228,6 @@ nav a.active::after {
   text-transform: uppercase;
 }
 
-.brand-divider {
-  position: relative;
-  z-index: 5;
-  height: 0;
-  display: grid;
-  place-items: center;
-}
-
-.brand-divider span {
-  min-width: min(420px, calc(100vw - 2rem));
-  padding: 0.75rem 1.2rem;
-  border-top: 2px solid #eafaff;
-  border-bottom: 2px solid #8edcff;
-  border-left: 1px solid rgba(142, 220, 255, 0.42);
-  border-right: 1px solid rgba(234, 250, 255, 0.42);
-  border-radius: 8px;
-  color: #f7fdff;
-  background:
-    linear-gradient(90deg, rgba(142, 220, 255, 0.2), rgba(4, 15, 24, 0.94), rgba(234, 250, 255, 0.18));
-  box-shadow: 0 18px 60px rgba(0, 10, 20, 0.38), 0 0 42px rgba(142, 220, 255, 0.18);
-  backdrop-filter: blur(18px);
-  font-size: clamp(1.05rem, 2.6vw, 1.9rem);
-  font-weight: 900;
-  letter-spacing: 0.22em;
-  text-align: center;
-}
-
 .transition-film {
   position: relative;
   min-height: clamp(620px, 86vh, 900px);
