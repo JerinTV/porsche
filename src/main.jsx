@@ -4,10 +4,8 @@ import {
   Car,
   ChevronRight,
   Cpu,
-  Gem,
   Gauge,
   Menu,
-  MousePointer2,
   ShieldCheck,
   Sparkles,
   Timer,
@@ -28,6 +26,18 @@ const transitionFrameCount = 208;
 const transitionFrames = Array.from({ length: transitionFrameCount }, (_, index) => {
   const frame = String(index + 1).padStart(3, '0');
   return `/transition/ezgif-frame-${frame}.png`;
+});
+
+const chapterMotionFrameCount = 240;
+const chapterMotionFrames = Array.from({ length: chapterMotionFrameCount }, (_, index) => {
+  const frame = String(index + 1).padStart(3, '0');
+  return `/chapter-motion/ezgif-frame-${frame}.png`;
+});
+
+const craftMotionFrameCount = 300;
+const craftMotionFrames = Array.from({ length: craftMotionFrameCount }, (_, index) => {
+  const frame = String(index + 1).padStart(3, '0');
+  return `/craft-motion/ezgif-frame-${frame}.jpg`;
 });
 
 const gallery = [
@@ -57,7 +67,7 @@ const trims = [
   {
     id: 'shark',
     name: 'Shark Blue',
-    image: '/frames/ezgif-frame-035.png',
+    image: '/studio-cars/blue.jpg',
     accent: '#8edcff',
     surface: 'Studio blue finish',
     note: 'A cool, high-contrast visual specification with black aero details.',
@@ -65,7 +75,7 @@ const trims = [
   {
     id: 'white',
     name: 'Carrara White',
-    image: '/porsche/aero-studio.jpeg',
+    image: '/studio-cars/white.jpg',
     accent: '#f4fbff',
     surface: 'Track white finish',
     note: 'Clean bodywork, red wheel accents, and a focused circuit stance.',
@@ -73,7 +83,7 @@ const trims = [
   {
     id: 'silver',
     name: 'GT Silver',
-    image: '/porsche/track-rear.jpeg',
+    image: '/studio-cars/silver.jpg',
     accent: '#c8d2d7',
     surface: 'Classic metallic finish',
     note: 'A timeless Porsche look shaped by motorsport proportions.',
@@ -91,22 +101,22 @@ const marqueeWords = ['Cinematic', 'Motorsport', 'Precision', 'Luxury', 'Velocit
 
 const chapters = [
   {
-    image: '/porsche/rear-wing.jpeg',
+    image: '/porsche/aero-studio.jpeg',
     kicker: 'Aerodynamics',
-    title: 'Air becomes a performance component.',
-    text: 'A large rear wing, sculpted intakes, and track-led bodywork give the 911 GT3 RS its unmistakable visual pressure.',
+    title: 'Form shaped by downforce.',
+    text: 'The rear wing, air guides, and sculpted surfaces turn pressure into poise with unmistakable GT character.',
   },
   {
     image: '/porsche/interior.jpeg',
     kicker: 'Cockpit',
-    title: 'Everything is arranged around response.',
-    text: 'The interior is purposeful and close to the driver, with a rhythm that feels technical without losing luxury.',
+    title: 'A cabin built around intent.',
+    text: 'Every control sits close to the driver, balancing precision, restraint, and the tactile calm of a focused machine.',
   },
   {
     image: '/porsche/track-front.jpeg',
     kicker: 'Road presence',
-    title: 'Poise that reads before the engine starts.',
-    text: 'Wide stance, low surfaces, and motorsport details create a car that feels in motion even when still.',
+    title: 'Presence before motion.',
+    text: 'A low stance, wide body, and clean motorsport details give the car a composed authority before it moves.',
   },
 ];
 
@@ -370,6 +380,95 @@ function Hero() {
   );
 }
 
+function FrameSequence({ frames, fps = 30, duration = 8000, className = '' }) {
+  const canvasRef = React.useRef(null);
+  const imagesRef = React.useRef([]);
+  const rafRef = React.useRef(0);
+  const startRef = React.useRef(0);
+  const [loadedFirst, setLoadedFirst] = React.useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+
+  const drawFrame = React.useCallback((index) => {
+    const canvas = canvasRef.current;
+    const image = imagesRef.current[index];
+    if (!canvas || !image?.complete) return;
+
+    const ctx = canvas.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(rect.width * ratio));
+    const height = Math.max(1, Math.floor(rect.height * ratio));
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    const scale = Math.max(width / image.width, height / image.height);
+    const drawWidth = image.width * scale;
+    const drawHeight = image.height * scale;
+    ctx.drawImage(image, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+  }, []);
+
+  React.useEffect(() => {
+    let mounted = true;
+    frames.forEach((src, index) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.onload = () => {
+        if (!mounted) return;
+        imagesRef.current[index] = image;
+        if (index === 0) {
+          setLoadedFirst(true);
+          drawFrame(0);
+        }
+      };
+      image.src = src;
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [drawFrame, frames]);
+
+  React.useEffect(() => {
+    const onResize = () => drawFrame(0);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [drawFrame]);
+
+  React.useEffect(() => {
+    if (!loadedFirst || reducedMotion) return undefined;
+
+    const frameDuration = 1000 / fps;
+    const tick = (time) => {
+      if (!startRef.current) startRef.current = time;
+      const elapsed = (time - startRef.current) % duration;
+      const index = Math.min(frames.length - 1, Math.floor(elapsed / frameDuration) % frames.length);
+      drawFrame(index);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      startRef.current = 0;
+    };
+  }, [drawFrame, duration, fps, frames.length, loadedFirst, reducedMotion]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`frame-sequence ${className}`}
+      aria-hidden="true"
+    />
+  );
+}
+
 function AnimatedSpec({ value, suffix, label }) {
   const ref = React.useRef(null);
   const [display, setDisplay] = React.useState('0');
@@ -417,13 +516,13 @@ function ModelSection() {
     <section className="model-section section-pad" id="models">
       <div className="model-heading">
         <div className="section-head reveal">
-          <p className="eyebrow">The 911 spirit</p>
-          <h2><SplitText>Motorsport poise, road presence.</SplitText></h2>
+          <p className="eyebrow">911 GT3 RS</p>
+          <h2><SplitText>Born on track. Refined for command.</SplitText></h2>
         </div>
       </div>
       <div className="model-layout">
         <div className="model-image reveal">
-          <img src="/porsche/aero-studio.jpeg" alt="Porsche 911 GT3 RS in aerodynamic studio testing" />
+          <FrameSequence frames={chapterMotionFrames} className="model-motion" />
           <div className="model-float float-a">
             <span>4.0L</span>
             <small>flat-six</small>
@@ -434,12 +533,6 @@ function ModelSection() {
           </div>
         </div>
         <div className="model-copy reveal">
-          <p>
-            The 911 GT3 RS turns motorsport technology into a focused road car:
-            direct, lightweight, aerodynamic, and visually unmistakable from
-            every angle. This section is built like a model launch page, with
-            image, crest, statistics, and narrative moving as one system.
-          </p>
           <div className="stats-row">
             {specs.map((spec) => (
               <AnimatedSpec key={spec.label} {...spec} />
@@ -455,8 +548,8 @@ function ChapterSection() {
   return (
     <section className="chapter-section section-pad">
       <div className="chapter-intro reveal">
-        <p className="eyebrow">Design chapters</p>
-        <h2><SplitText>Every detail has a job to do.</SplitText></h2>
+        <p className="eyebrow">Engineering details</p>
+        <h2><SplitText>Elegance held under pressure.</SplitText></h2>
       </div>
       <div className="chapter-grid">
         {chapters.map((chapter) => (
@@ -584,7 +677,7 @@ function TransitionFilm() {
 }
 
 function StudioSection() {
-  const [selected, setSelected] = React.useState(trims[0]);
+  const carouselTrims = [...trims, ...trims];
 
   return (
     <section className="studio-section section-pad" id="studio">
@@ -597,24 +690,18 @@ function StudioSection() {
           changing the page architecture.
         </p>
       </div>
-      <div className="studio-stage reveal" style={{ '--trim-accent': selected.accent }}>
-        <div className="studio-image">
-          <img src={selected.image} alt={`Porsche 911 GT3 RS in ${selected.name}`} />
-        </div>
-        <div className="trim-panel">
-          <span>{selected.surface}</span>
-          <h3>{selected.name}</h3>
-          <p>{selected.note}</p>
-          <div className="swatches" aria-label="Select exterior finish">
-            {trims.map((trim) => (
-              <button
-                className={selected.id === trim.id ? 'selected' : ''}
-                key={trim.id}
-                onClick={() => setSelected(trim)}
-                style={{ '--swatch': trim.accent }}
-                type="button"
-                aria-label={`Select ${trim.name}`}
-              />
+      <div className="studio-stage reveal">
+        <div className="studio-carousel" aria-label="Porsche exterior finish carousel">
+          <div className="studio-track">
+            {carouselTrims.map((trim, index) => (
+              <article className="studio-car-slide" key={`${trim.id}-${index}`} style={{ '--trim-accent': trim.accent }}>
+                <img src={trim.image} alt={`Porsche 911 GT3 RS in ${trim.name}`} />
+                <div>
+                  <span>{trim.surface}</span>
+                  <h3>{trim.name}</h3>
+                  <p>{trim.note}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -683,7 +770,14 @@ function GallerySection() {
 function CraftSection() {
   return (
     <section className="craft-section" id="craft">
-      <img src="/porsche/track-front.jpeg" alt="Porsche 911 GT3 RS on track" />
+      <div className="craft-motion-frame reveal">
+        <FrameSequence
+          frames={craftMotionFrames}
+          fps={30}
+          duration={10000}
+          className="craft-motion"
+        />
+      </div>
       <div className="craft-panel reveal">
         <p className="eyebrow">Motorsport character</p>
         <h2>Performance that looks fast before it moves.</h2>
@@ -694,39 +788,6 @@ function CraftSection() {
         <a className="text-link" href="#contact">
           Request a private viewing <ChevronRight size={18} />
         </a>
-      </div>
-    </section>
-  );
-}
-
-function ImmersiveSection() {
-  return (
-    <section className="immersive-section">
-      <div className="sticky-copy reveal">
-        <p className="eyebrow">Porsche digital showroom</p>
-        <h2>A site that feels engineered, not decorated.</h2>
-        <p>
-          Sticky imagery, progressive copy, animated measurements, and
-          interactive selection patterns make the experience feel alive while
-          keeping the car at the center.
-        </p>
-      </div>
-      <div className="timeline">
-        <article className="timeline-card reveal">
-          <MousePointer2 size={22} />
-          <h3>Discover</h3>
-          <p>Visitors move from cinematic impact into detail-led model storytelling.</p>
-        </article>
-        <article className="timeline-card reveal">
-          <Gem size={22} />
-          <h3>Specify</h3>
-          <p>Finish, cockpit, wheels, and trim moments can expand naturally from this structure.</p>
-        </article>
-        <article className="timeline-card reveal">
-          <Timer size={22} />
-          <h3>Enquire</h3>
-          <p>The final flow feels private and premium instead of like a generic form.</p>
-        </article>
       </div>
     </section>
   );
@@ -836,7 +897,6 @@ function App() {
       <StudioSection />
       <GallerySection />
       <CraftSection />
-      <ImmersiveSection />
       <ExperienceSection />
       <ContactSection />
       <footer>
