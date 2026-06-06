@@ -448,14 +448,14 @@ function TransitionFilm() {
 
   return (
     <section className="transition-film" aria-label="Porsche motion feature">
+      <div className="transition-video reveal">
+        <canvas ref={canvasRef} />
+        <div className="transition-shine" />
+      </div>
       <div className="transition-copy transition-left reveal">
         <small>Composure</small>
         <span>Calm by design</span>
         <p>Every surface is shaped to stay settled when the pace rises.</p>
-      </div>
-      <div className="transition-video reveal">
-        <canvas ref={canvasRef} />
-        <div className="transition-shine" />
       </div>
       <div className="transition-copy transition-right reveal">
         <small>Velocity</small>
