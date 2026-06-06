@@ -280,7 +280,7 @@ nav a.active::after {
   position: relative;
   min-height: clamp(620px, 86vh, 900px);
   display: grid;
-  grid-template-columns: minmax(180px, 0.72fr) minmax(420px, 1.5fr) minmax(180px, 0.72fr);
+  grid-template-columns: minmax(180px, 1fr) minmax(320px, 420px) minmax(180px, 1fr);
   gap: clamp(1rem, 3vw, 3rem);
   align-items: center;
   padding: clamp(5.6rem, 10vw, 8.5rem) clamp(1rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
@@ -305,6 +305,8 @@ nav a.active::after {
 
 .transition-video {
   position: relative;
+  width: min(420px, calc(100vw - 2rem));
+  justify-self: center;
   overflow: hidden;
   border-radius: 8px;
   background: #071521;

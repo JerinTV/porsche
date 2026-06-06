@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import './styles.css';
 
-const frameCount = 50;
+const frameCount = 300;
 const frames = Array.from({ length: frameCount }, (_, index) => {
   const frame = String(index + 1).padStart(3, '0');
   return `/frames/ezgif-frame-${frame}.png`;
@@ -128,16 +128,31 @@ function usePageMotion() {
 
 function HeroCanvas({ onCaptionActive }) {
   const canvasRef = React.useRef(null);
-  const imagesRef = React.useRef([]);
+  const imageCache = React.useRef(new Map());
   const rafRef = React.useRef(0);
   const lastTickRef = React.useRef(0);
   const [frame, setFrame] = React.useState(0);
-  const [loaded, setLoaded] = React.useState(0);
+  const [loadedFirst, setLoadedFirst] = React.useState(false);
   const reducedMotion = usePrefersReducedMotion();
+
+  const getImage = React.useCallback((index) => {
+    const src = frames[index];
+    const cached = imageCache.current.get(src);
+    if (cached) return cached;
+
+    const image = new Image();
+    image.decoding = 'async';
+    image.onload = () => {
+      if (index === 0) setLoadedFirst(true);
+    };
+    image.src = src;
+    imageCache.current.set(src, image);
+    return image;
+  }, []);
 
   const drawFrame = React.useCallback((index) => {
     const canvas = canvasRef.current;
-    const image = imagesRef.current[index];
+    const image = getImage(index);
     if (!canvas || !image?.complete) return;
 
     const ctx = canvas.getContext('2d');
@@ -158,30 +173,25 @@ function HeroCanvas({ onCaptionActive }) {
     const x = (width - drawWidth) / 2;
     const y = (height - drawHeight) / 2;
     ctx.drawImage(image, x, y, drawWidth, drawHeight);
-  }, []);
+  }, [getImage]);
 
   React.useEffect(() => {
-    let mounted = true;
-    frames.forEach((src, index) => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.onload = () => {
-        if (!mounted) return;
-        imagesRef.current[index] = image;
-        setLoaded((count) => count + 1);
-        if (index === 0) drawFrame(0);
-      };
-      image.src = src;
-    });
+    for (let offset = 0; offset < 24; offset += 1) {
+      getImage((frame + offset) % frameCount);
+    }
 
-    return () => {
-      mounted = false;
-    };
-  }, [drawFrame]);
+    if (imageCache.current.size > 72) {
+      imageCache.current.forEach((_, src) => {
+        const match = src.match(/ezgif-frame-(\d+)\.png$/);
+        const index = match ? Number(match[1]) - 1 : 0;
+        const forward = (index - frame + frameCount) % frameCount;
+        const backward = (frame - index + frameCount) % frameCount;
+        if (forward > 48 && backward > 24) imageCache.current.delete(src);
+      });
+    }
 
-  React.useEffect(() => {
     drawFrame(frame);
-  }, [drawFrame, frame, loaded]);
+  }, [drawFrame, frame, getImage]);
 
   React.useEffect(() => {
     const onResize = () => drawFrame(frame);
@@ -194,7 +204,7 @@ function HeroCanvas({ onCaptionActive }) {
 
     const tick = (time) => {
       if (!lastTickRef.current) lastTickRef.current = time;
-      if (time - lastTickRef.current > 58) {
+      if (time - lastTickRef.current > 33) {
         setFrame((current) => (current + 1) % frameCount);
         lastTickRef.current = time;
       }
@@ -206,20 +216,18 @@ function HeroCanvas({ onCaptionActive }) {
   }, [reducedMotion]);
 
   React.useEffect(() => {
-    onCaptionActive?.(frame >= 34);
+    onCaptionActive?.(frame >= Math.floor(frameCount * 0.68));
   }, [frame, onCaptionActive]);
-
-  const progress = Math.round((loaded / frameCount) * 100);
 
   return (
     <div className="hero-media" aria-hidden="true">
       <canvas ref={canvasRef} className="cinematic-canvas" />
       <div className="media-vignette" />
-      {loaded < frameCount && (
+      {!loadedFirst && (
         <div className="loader">
-          <span>{progress}%</span>
+          <span>Loading</span>
           <div className="loader-track">
-            <i style={{ width: `${progress}%` }} />
+            <i style={{ width: '38%' }} />
           </div>
         </div>
       )}
