@@ -1113,7 +1113,7 @@ footer p {
     min-height: auto;
     height: auto;
     aspect-ratio: 16 / 9;
-    margin-top: 0;
+    margin-top: 58px;
   }
 
   .hero-media {
@@ -1126,6 +1126,13 @@ footer p {
 
   .menu-button {
     display: grid;
+  }
+
+  .topbar {
+    min-height: 58px;
+    padding: 0.55rem 1rem;
+    background: #06111b;
+    backdrop-filter: none;
   }
 
   .media-vignette {
@@ -1143,7 +1150,37 @@ footer p {
   }
 
   .hero-side-copy {
-    display: none;
+    top: auto;
+    bottom: 0.75rem;
+    display: block;
+    width: min(42%, 158px);
+    text-shadow: 0 8px 24px rgba(0, 8, 18, 0.9);
+  }
+
+  .hero-side-copy.left {
+    left: 0.85rem;
+    transform: translate(-12px, 0);
+  }
+
+  .hero-side-copy.right {
+    right: 0.85rem;
+    transform: translate(12px, 0);
+  }
+
+  .hero-side-copy.left.visible,
+  .hero-side-copy.right.visible {
+    transform: translate(0, 0);
+  }
+
+  .hero-side-copy span {
+    margin-bottom: 0.25rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-side-copy strong {
+    font-size: clamp(0.82rem, 3.3vw, 1.08rem);
+    line-height: 1;
   }
 
   .scroll-cue {
