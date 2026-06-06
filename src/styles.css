@@ -1185,10 +1185,6 @@ footer p {
     align-content: center;
   }
 
-  .transition-video canvas {
-    object-fit: contain;
-  }
-
   footer {
     display: grid;
   }
