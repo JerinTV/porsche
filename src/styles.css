@@ -232,7 +232,7 @@ nav a.active::after {
 
 .transition-film {
   position: relative;
-  min-height: clamp(620px, 86vh, 900px);
+  min-height: clamp(480px, 68vh, 680px);
   display: grid;
   grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
   gap: clamp(1rem, 3vw, 3rem);
@@ -1097,7 +1097,7 @@ footer p {
 
   .transition-film {
     grid-template-columns: 1fr;
-    min-height: clamp(620px, 92svh, 860px);
+    min-height: clamp(460px, 72svh, 680px);
     padding-top: clamp(7rem, 18vw, 10rem);
     padding-bottom: clamp(7rem, 18vw, 10rem);
   }
@@ -1221,7 +1221,7 @@ footer p {
 
   .transition-film {
     min-height: auto;
-    height: calc(100vw / 1.46);
+    height: calc(100vw / 1.7);
     gap: 2rem;
     align-content: center;
     padding: 0 clamp(1rem, 5vw, 2rem);
