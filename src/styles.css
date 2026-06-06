@@ -1110,7 +1110,10 @@ footer p {
 
 @media (max-width: 760px) {
   .hero-shell {
-    min-height: 100svh;
+    min-height: auto;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin-top: 0;
   }
 
   .hero-media {
@@ -1180,9 +1183,15 @@ footer p {
   }
 
   .transition-film {
-    min-height: 100svh;
+    min-height: auto;
+    height: calc(100vw / 1.46);
     gap: 2rem;
     align-content: center;
+    padding: 0 clamp(1rem, 5vw, 2rem);
+  }
+
+  .transition-copy {
+    display: none;
   }
 
   footer {

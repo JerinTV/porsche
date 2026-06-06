@@ -156,16 +156,6 @@ function HeroCanvas({ onCaptionActive }) {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     const portraitViewport = rect.width / rect.height < 1.05;
-    if (portraitViewport) {
-      const coverScale = Math.max(width / image.width, height / image.height);
-      const coverWidth = image.width * coverScale;
-      const coverHeight = image.height * coverScale;
-      ctx.save();
-      ctx.filter = 'blur(18px) brightness(0.64) saturate(1.08)';
-      ctx.drawImage(image, (width - coverWidth) / 2, (height - coverHeight) / 2, coverWidth, coverHeight);
-      ctx.restore();
-    }
-
     const scale = portraitViewport
       ? Math.min(width / image.width, height / image.height)
       : Math.max(width / image.width, height / image.height);
@@ -414,26 +404,6 @@ function TransitionFilm() {
     const horizontalCrop = image.width * 0.09;
     const sourceWidth = image.width - horizontalCrop * 2;
     const portraitViewport = rect.width / rect.height < 1.05;
-    if (portraitViewport) {
-      const coverScale = Math.max(width / sourceWidth, height / image.height);
-      const coverWidth = sourceWidth * coverScale;
-      const coverHeight = image.height * coverScale;
-      ctx.save();
-      ctx.filter = 'blur(18px) brightness(0.62) saturate(1.08)';
-      ctx.drawImage(
-        image,
-        horizontalCrop,
-        0,
-        sourceWidth,
-        image.height,
-        (width - coverWidth) / 2,
-        (height - coverHeight) / 2,
-        coverWidth,
-        coverHeight
-      );
-      ctx.restore();
-    }
-
     const scale = portraitViewport
       ? Math.min(width / sourceWidth, height / image.height)
       : Math.max(width / sourceWidth, height / image.height);
