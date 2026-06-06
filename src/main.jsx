@@ -460,11 +460,11 @@ function TransitionFilm() {
       </div>
       <div className="transition-copy transition-left reveal">
         <small>Composure</small>
-        <span>Calm by design</span>
+        <span>Calm<br />by<br />design</span>
       </div>
       <div className="transition-copy transition-right reveal">
         <small>Velocity</small>
-        <span>Relentless in motion</span>
+        <span>Relentless<br />in<br />motion</span>
       </div>
     </section>
   );
