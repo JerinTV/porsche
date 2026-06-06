@@ -420,13 +420,18 @@ function ModelSection() {
           <p className="eyebrow">The 911 spirit</p>
           <h2><SplitText>Motorsport poise, road presence.</SplitText></h2>
         </div>
-        <div className="crest-art reveal">
-          <img src="/porsche/PR-transparent.png" alt="Porsche crest" />
-        </div>
       </div>
       <div className="model-layout">
         <div className="model-image reveal">
           <img src="/porsche/aero-studio.jpeg" alt="Porsche 911 GT3 RS in aerodynamic studio testing" />
+          <div className="model-float float-a">
+            <span>4.0L</span>
+            <small>flat-six</small>
+          </div>
+          <div className="model-float float-b">
+            <span>GT</span>
+            <small>aero system</small>
+          </div>
         </div>
         <div className="model-copy reveal">
           <p>
@@ -441,6 +446,9 @@ function ModelSection() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="crest-bridge reveal" aria-hidden="true">
+        <img src="/porsche/PR-transparent.png" alt="" />
       </div>
     </section>
   );
