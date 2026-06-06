@@ -181,13 +181,9 @@ nav a.active::after {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 0.35rem 1.2rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(226, 249, 255, 0.18);
-  border-radius: 8px;
+  padding: 0;
   color: #f7fdff;
-  background: rgba(4, 15, 24, 0.42);
-  box-shadow: 0 24px 80px rgba(0, 10, 20, 0.24);
-  backdrop-filter: blur(16px);
+  text-shadow: 0 10px 34px rgba(0, 10, 18, 0.82), 0 0 26px rgba(188, 236, 255, 0.28);
   opacity: 0;
   transform: translate(-50%, 18px);
   transition: opacity 520ms ease, transform 520ms ease;
@@ -204,12 +200,9 @@ nav a.active::after {
   z-index: 3;
   top: 50%;
   width: min(260px, 24vw);
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(226, 249, 255, 0.16);
-  border-radius: 8px;
+  padding: 0;
   color: #f7fdff;
-  background: rgba(4, 15, 24, 0.34);
-  backdrop-filter: blur(14px);
+  text-shadow: 0 10px 34px rgba(0, 10, 18, 0.86), 0 0 28px rgba(188, 236, 255, 0.24);
   opacity: 0;
   transition: opacity 520ms ease, transform 520ms ease;
   pointer-events: none;
@@ -241,16 +234,19 @@ nav a.active::after {
 .hero-side-copy span {
   display: block;
   margin-bottom: 0.45rem;
-  color: #bcecff;
+  color: rgba(244, 252, 255, 0.82);
   font-size: 0.68rem;
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .hero-side-copy strong {
-  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
-  line-height: 1.28;
+  color: #ffffff;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  line-height: 1.05;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .brand-divider {
@@ -283,24 +279,27 @@ nav a.active::after {
 .hero-caption span {
   grid-row: span 2;
   align-self: center;
-  color: #bcecff;
+  color: rgba(244, 252, 255, 0.82);
   font-size: 0.7rem;
   font-weight: 900;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .hero-caption strong {
-  font-size: clamp(1rem, 2vw, 1.45rem);
-  font-weight: 800;
+  color: #ffffff;
+  font-size: clamp(1.55rem, 3vw, 3rem);
+  font-weight: 950;
   letter-spacing: 0;
   text-align: right;
+  text-transform: uppercase;
 }
 
 .hero-caption p {
   margin-bottom: 0;
-  color: rgba(238, 249, 255, 0.74);
-  font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+  color: rgba(247, 253, 255, 0.88);
+  font-size: clamp(0.86rem, 1.4vw, 1.05rem);
+  font-weight: 700;
   line-height: 1.45;
   text-align: right;
 }
