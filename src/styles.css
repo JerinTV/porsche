@@ -798,12 +798,14 @@ h3 {
 }
 
 .crest-bridge {
-  position: absolute;
+  position: relative;
   z-index: 4;
-  left: 50%;
-  bottom: 0;
+  height: 0;
+  display: grid;
+  place-items: center;
   width: clamp(118px, 16vw, 210px);
-  transform: translate(-50%, 50%);
+  margin: 0 auto;
+  transform: translateY(50%);
   filter:
     drop-shadow(0 24px 34px rgba(0, 8, 16, 0.28))
     drop-shadow(0 0 28px rgba(242, 211, 137, 0.18));

@@ -447,9 +447,6 @@ function ModelSection() {
           </div>
         </div>
       </div>
-      <div className="crest-bridge reveal" aria-hidden="true">
-        <img src="/porsche/PR-transparent.png" alt="" />
-      </div>
     </section>
   );
 }
@@ -831,6 +828,9 @@ function App() {
       <TransitionFilm />
       <MarqueeBand />
       <ModelSection />
+      <div className="crest-bridge reveal" aria-hidden="true">
+        <img src="/porsche/PR-transparent.png" alt="" />
+      </div>
       <ChapterSection />
       <PerformanceSection />
       <StudioSection />
