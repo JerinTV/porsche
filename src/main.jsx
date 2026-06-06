@@ -653,111 +653,6 @@ function PerformanceSection() {
   );
 }
 
-function ThreeSculptureSection() {
-  const mountRef = React.useRef(null);
-
-  React.useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return undefined;
-    let disposed = false;
-    let cleanup = () => {};
-
-    import('three').then((THREE) => {
-      if (disposed || !mountRef.current) return;
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-      camera.position.set(0, 0.2, 5.2);
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
-      renderer.setSize(mount.clientWidth, mount.clientHeight);
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      mount.appendChild(renderer.domElement);
-
-      const group = new THREE.Group();
-      scene.add(group);
-
-      const material = new THREE.MeshPhysicalMaterial({
-        color: 0xcfd8dc,
-        metalness: 0.92,
-        roughness: 0.18,
-        clearcoat: 1,
-        clearcoatRoughness: 0.08,
-        envMapIntensity: 1.6,
-      });
-
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.08, 24, 140), material);
-      const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.78, 4), material);
-      const bladeA = new THREE.Mesh(new THREE.BoxGeometry(2.45, 0.035, 0.1), material);
-      const bladeB = bladeA.clone();
-      bladeA.rotation.z = 0.42;
-      bladeB.rotation.z = -0.42;
-      group.add(ring, core, bladeA, bladeB);
-
-      scene.add(new THREE.AmbientLight(0x94dfff, 0.8));
-      const key = new THREE.PointLight(0xffffff, 6.2, 12);
-      key.position.set(2.4, 2, 3.2);
-      scene.add(key);
-      const gold = new THREE.PointLight(0xf2d389, 3.2, 10);
-      gold.position.set(-2.8, -1, 2.2);
-      scene.add(gold);
-
-      let raf = 0;
-      const resize = () => {
-        const width = mount.clientWidth;
-        const height = mount.clientHeight;
-        camera.aspect = width / Math.max(1, height);
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height);
-      };
-      const animate = (time) => {
-        const t = time * 0.001;
-        group.rotation.y = t * 0.42;
-        group.rotation.x = Math.sin(t * 0.7) * 0.12;
-        ring.rotation.z = t * 0.18;
-        core.rotation.y = -t * 0.65;
-        raf = requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      };
-
-      resize();
-      window.addEventListener('resize', resize);
-      animate(0);
-
-      cleanup = () => {
-        cancelAnimationFrame(raf);
-        window.removeEventListener('resize', resize);
-        renderer.dispose();
-        material.dispose();
-        ring.geometry.dispose();
-        core.geometry.dispose();
-        bladeA.geometry.dispose();
-        if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-      };
-    });
-    return () => {
-      disposed = true;
-      cleanup();
-    };
-  }, []);
-
-  return (
-    <section className="three-section section-pad">
-      <div className="three-copy reveal">
-        <p className="eyebrow">Digital performance object</p>
-        <h2><SplitText>Metal, light, motion.</SplitText></h2>
-        <p>
-          A lightweight Three.js sculpture adds depth and futuristic polish,
-          echoing wheel, aero, and mechanical forms without competing with the
-          real car imagery.
-        </p>
-      </div>
-      <div className="three-stage reveal" ref={mountRef} aria-label="Metallic 3D Porsche-inspired sculpture" />
-    </section>
-  );
-}
-
 function GallerySection() {
   return (
     <section className="gallery-section section-pad" id="gallery">
@@ -930,7 +825,6 @@ function App() {
       <ModelSection />
       <ChapterSection />
       <PerformanceSection />
-      <ThreeSculptureSection />
       <StudioSection />
       <GallerySection />
       <CraftSection />
